@@ -1,0 +1,61 @@
+version: '3.8'
+services:
+  postgresql:
+    image: postgres:latest
+    container_name: postgres
+    hostname: database
+    restart: "on-failure"
+    environment:
+      POSTGRES_USER: summaryDBAccess
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: asrSummaryDB
+    networks:
+      - db_network
+    ports:
+      - "5432:5432"
+  adminer:
+    container_name: adminer
+    image: adminer:latest
+    hostname: adminer
+    restart: "on-failure"
+    ports:
+      - "8080:8080"
+    networks:
+      - db_network
+      - web_network
+    depends_on:
+      - postgresql
+      - nginx
+    environment:
+      ADMINER_DEFAULT_SERVER: database
+      ADMINER_DEFAULT_TYPE: postgresql
+      ADMINER_DEFAULT_DB: asrSummaryDB
+  dashboard:
+    container_name: dashboard
+    restart: always
+    build: .
+    networks:
+      - db_network
+      - web_network
+    depends_on:
+      - postgresql
+      - nginx
+    env_file:
+      - env.env
+  nginx:
+    container_name: nginx
+    restart: always
+    image: "nginx:latest"
+    ports:
+      - "5085:5085"
+      - "5095:5095"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+    networks:
+      - web_network
+networks:
+  db_network:
+    driver: bridge
+  web_network:
+    driver: bridge
+ 

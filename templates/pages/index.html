@@ -1,0 +1,379 @@
+{% extends 'layouts/base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block breadcrumbs %}{% endblock breadcrumbs %}
+
+{% block content %}
+
+  <!-- [ Main Content ] start -->
+  <div class="row">
+  
+    <!--[ Recent Users ] start-->
+    <div class="col-xl-8 col-md-6">
+      <div class="card Recent-Users">
+
+        {% if products %}
+
+          <div class="card-header">
+            <h5>Products</h5>
+          </div>
+          <div class="card-block px-0 py-3">
+            <div class="table-responsive">
+              <table class="table table-hover">
+
+                <tbody>
+                  {% for p in products %}
+
+                    <tr class="unread">
+                      <td><img class="rounded-circle" style="width:40px;" src="{% static 'assets/images/user/avatar-1.jpg' %}"
+                          alt="activity-user">
+                      </td>
+                      <td>
+                        <h6 class="mb-1">{{ p.name }}</h6>
+                        <p class="m-0">{{ p.info }}</p>
+                      </td>
+                      <td>
+                        <h6 class="text-muted">
+                          <i class="fa-solid fa-cart-shopping"></i>
+                          <i class="fas fa-tag text-c-green f-10 m-r-15"></i>
+                          ${{ p.price }}
+                        </h6>
+                      </td>
+                      <td>
+                        <a href="#" class="label theme-bg2 text-white f-12">View</a>
+                        <a href="#" class="label theme-bg text-white f-12">Delete</a>
+                      </td>
+                    </tr>
+
+                  {% endfor %}
+                </tbody>
+                
+              </table>
+            </div>
+          </div>
+
+        {% else %}
+        
+          <div class="card-header">
+            <h5>Recently finished summarys</h5>
+          </div>
+          <div class="card-block px-0 py-3">
+            <div class="table-responsive constrain-size-of-summarytable">
+              <table class="table table-hover">
+              <thead>
+                  <tr>
+                    <th>Thread-Id</th>
+                    <th>Thread-Creator</th>
+                      <th>Forum</th>
+                      <th>Thread</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                 {% for item in summarizedThreads %}
+                  <tr class="unread">
+                    <td><h5><a href="/summary/{{ item.thread_id }}/" >{{ item.thread_id }}</a></h5></td>
+                    <td>
+                      <h6 class="mb-1">{{ item.thread_creator_name }}</h6>
+                      <p class="m-0">{{ item.thread_creator_id }}</p>
+                    </td>
+                    <td>
+                      <h6 class="text-muted"><i class="text-c-green f-10 m-r-15"></i>{{ item.forum_title }}</h6>
+                    </td>
+                      <td><h6>{{ item.thread_name }}</h6></td>
+                  </tr>
+                {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        {% endif %}
+
+
+      </div>
+    </div>
+    <!--[ Recent Users ] end-->
+
+    <!-- [ statistics year chart ] start -->
+    <div class="col-xl-4 col-md-6">
+      <div class="card card-event">
+        <div class="card-block">
+
+          <div class="row align-items-center justify-content-center">
+            <div class="col">
+              <h5 class="m-0">Summarized Threads:</h5>
+            </div>
+            <div class="col-auto">
+              <label class="label theme-bg2 text-white f-14 f-w-400 float-right">{{ summarized_threads_count|intcomma }}</label>
+            </div>
+          </div>
+
+         <div class="row align-items-center justify-content-center">
+            <div class="col">
+              <h5 class="mt-4 mb-0">Waiting Summarizations:</h5>
+            </div>
+            <div class="col-auto" style="margin-top: 1.5rem!important;">
+              <label class="label theme-bg2 text-white f-14 f-w-400 float-right">{{ open_summary_tasks|intcomma }}</label>
+            </div>
+         </div>
+        <hr>
+
+        <div class="row align-items-center justify-content-center">
+            <div class="col">
+              <h5 class="mt-4 mb-0">Forum API-Calls:</h5>
+            </div>
+            <div class="col-auto" style="margin-top: 1.5rem!important;">
+              <label class="label theme-bg2 text-white f-14 f-w-400 float-right">{{ daily_forum_api_req|intcomma }}</label>
+            </div>
+         </div>
+
+        <div class="row align-items-center justify-content-center">
+            <div class="col">
+              <h5 class="mt-4 mb-0">Download Time:</h5>
+            </div>
+            <div class="col-auto" style="margin-top: 1.5rem!important;">
+              <label class="label theme-bg2 text-white f-14 f-w-400 float-right">{{ daily_download_runtime }}h</label>
+            </div>
+         </div>
+
+         <hr>
+
+        <div class="row align-items-center justify-content-center">
+            <div class="col">
+              <h5 class="mt-4 mb-0">Large Language Model Runs:</h5>
+            </div>
+            <div class="col-auto" style="margin-top: 1.5rem!important;">
+              <label class="label theme-bg2 text-white f-14 f-w-400 float-right">{{ daily_llm_runs|intcomma }}</label>
+            </div>
+         </div>
+
+        <div class="row align-items-center justify-content-center">
+            <div class="col">
+              <h5 class="mt-4 mb-0">LLM Input Token:</h5>
+            </div>
+            <div class="col-auto" style="margin-top: 1.5rem!important;">
+              <label class="label theme-bg2 text-white f-14 f-w-400 float-right">{{ daily_llm_token_in|intcomma }}</label>
+            </div>
+         </div>
+        <div class="row align-items-center justify-content-center">
+            <div class="col">
+              <h5 class="mt-4 mb-0">LLM Output Token:</h5>
+            </div>
+            <div class="col-auto" style="margin-top: 1.5rem!important;">
+              <label class="label theme-bg2 text-white f-14 f-w-400 float-right">{{ daily_llm_token_out|intcomma }}</label>
+            </div>
+         </div>
+        <div class="row align-items-center justify-content-center">
+            <div class="col">
+              <h5 class="mt-4 mb-0">LLM Time:</h5>
+            </div>
+            <div class="col-auto" style="margin-top: 1.5rem!important;">
+              <label class="label theme-bg2 text-white f-14 f-w-400 float-right">{{ daily_llm_runtime }}h</label>
+            </div>
+         </div>
+
+
+
+        </div>
+      </div>
+
+
+      <!--<div class="card">
+        <div class="card-block border-bottom">
+          <div class="row d-flex align-items-center">
+            <div class="col">
+              <h3 class="f-w-300">{{ dailySummariesInRun }}</h3>
+              <span class="d-block text-uppercase">Summarys done in current run</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-block">
+          <div class="row d-flex align-items-center">
+            <div class="col">
+              <h3 class="f-w-300">{{ dailySummariesToDo }}</h3>
+              <span class="d-block text-uppercase">Threads that need summarization</span>
+            </div>
+          </div>
+        </div>
+      </div>
+        -->
+    </div>
+    <!-- [ statistics year chart ] end -->
+    <!-- [ rating list ] starts-->
+
+
+{#    <div class="col-xl-4 col-md-6">#}
+{#      <div class="card user-list">#}
+{#        <div class="card-header">#}
+{#          <h5>Application logs</h5>#}
+{#        </div>#}
+{#        <div class="constrain-size-of-table">#}
+{#          <list>#}
+{#              {% for item in logEntryVariable %}#}
+{#               <li>{{ item }}</li>#}
+{#              {% endfor %}#}
+{#          </list>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+{#    <!-- [ rating list ] end-->#}
+{#    <div class="col-xl-8 col-md-12 m-b-30">#}
+{#      <ul class="nav nav-tabs" id="myTab" role="tablist">#}
+{#        <li class="nav-item">#}
+{#          <a class="nav-link" id="home-tab" data-toggle="tab" href="#daily_summary_counter" role="tab" aria-controls="home"#}
+{#            aria-selected="true">Daily summary counter</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#          <a class="nav-link active show" id="profile-tab" data-toggle="tab" href="#daily_requests" role="tab"#}
+{#            aria-controls="profile" aria-selected="false">Daily requests</a>#}
+{#        </li>#}
+{#        <li class="nav-item">#}
+{#          <a class="nav-link" id="contact-tab" data-toggle="tab" href="#summarized_threads" role="tab"#}
+{#            aria-controls="contact" aria-selected="false">Summarized threads</a>#}
+{#        </li>#}
+{#          <li class="nav-item">#}
+{#              <a class="nav-link" id="contact-tab" data-toggle="tab" href="#summary_levels" role="tab"#}
+{#            aria-controls="contact" aria-selected="false">Summary levels</a>#}
+{#          </li>#}
+{#      </ul>#}
+{#      <div class="tab-content constrain-size-of-table" id="myTabContent">#}
+{#        <div class="tab-pane fade" id="daily_summary_counter" role="tabpanel" aria-labelledby="home-tab">#}
+{#          <table class="table table-hover">#}
+{#            <thead>#}
+{#              <tr>#}
+{#                {% for item in dailySummaryCounterTableInfo %}#}
+{#                  <th> {{ item.name }}</th>#}
+{#                  {% endfor %}#}
+{#              </tr>#}
+{#            </thead>#}
+{#            <tbody>#}
+{#            {% for element in dailySummaryCounter %}#}
+{#              <tr>#}
+{#                <td>#}
+{#                  <h6 class="m-0"> {{ element.id }} </h6>#}
+{#                </td>#}
+{#                <td>#}
+{#                  <h6 class="m-0"> {{ element.summaries_done_today }} </h6>#}
+{#                </td>#}
+{#              <td>#}
+{#                  <h6 class="m-0">{{ element.summaries_todo }}</h6>#}
+{#              </td>#}
+{#              </tr>#}
+{#            {% endfor %}#}
+{#            </tbody>#}
+{#          </table>#}
+{#        </div>#}
+{#        <div class="tab-pane fade active show" id="daily_requests" role="tabpanel" aria-labelledby="profile-tab">#}
+{#          <table class="table table-hover">#}
+{#            <thead>#}
+{#              <tr>#}
+{#                  {% for item in dailyRequestsTableInfo %}#}
+{#                  <th>{{ item.name }}</th>#}
+{#                  {% endfor %}#}
+{#              </tr>#}
+{#            </thead>#}
+{#            <tbody>#}
+{#            {% for element in dailyRequests %}#}
+{#              <tr>#}
+{#                <td>#}
+{#                  <h6 class="m-0"> {{ element.id }}</h6>#}
+{#                </td>#}
+{#                <td>#}
+{#                  <h6 class="m-0">{{ element.number_of_api_calls }}</h6>#}
+{#                </td>#}
+{#                <td>#}
+{#                  <h6 class="m-0">{{ element.number_of_failed_api_calls }}</h6>#}
+{#                </td>#}
+{#              </tr>#}
+{#            {% endfor %}#}
+{#            </tbody>#}
+{#          </table>#}
+{##}
+{#        </div>#}
+{#        <div class="tab-pane fade" id="summarized_threads" role="tabpanel" aria-labelledby="contact-tab">#}
+{#          <table class="table table-hover">#}
+{#            <thead>#}
+{#              <tr>#}
+{#                {% for item in summarizedThreadTableInfo %}#}
+{#                    <th>{{ item.name }}</th>#}
+{#                  {% endfor %}#}
+{#              </tr>#}
+{#            </thead>#}
+{#            <tbody>#}
+{#                {% for element in summarizedThreads %}#}
+{#              <tr>#}
+{#              <td>#}
+{#                  <h6 class="m-0">{{ element.id }}</h6>#}
+{#              </td>#}
+{#                <td>#}
+{#                  <h6 class="m-0">{{ element.forum_title }}</h6>#}
+{#                </td>#}
+{#                <td>#}
+{#                  <h6 class="m-0">{{ element.thread_id }}</h6>#}
+{#                </td>#}
+{#                <td>#}
+{#                  <h6 class="m-0">{{ element.thread_type }}</h6>#}
+{#                </td>#}
+{#                <td>#}
+{#                  <h6 class="m-0">{{ element.thread_name }}</h6>#}
+{#                </td>#}
+{#                <td> <h6 class="m-0">{{ element.thread_creator_name }}</h6>#}
+{#                </td>#}
+{#            <td> <h6 class="m-0">{{ element.thread_creator_id }}</h6>#}
+{#                </td>#}
+{#            <td> <h6 class="m-0">{{ element.thread_last_post_date }}</h6>#}
+{#                </td>#}
+{#            <td> <h6 class="m-0">{{ element.thread_reply_count }}</h6>#}
+{#                </td>#}
+{#            <td> <h6 class="m-0">{{ element.thread_summary }}</h6>#}
+{#                </td>#}
+{#            <td> <h6 class="m-0">{{ element.thread_url }}</h6>#}
+{#                </td>#}
+{#            <td> <h6 class="m-0">{{ element.last_changes }}</h6>#}
+{#                </td>#}
+{#              </tr>#}
+{#            {% endfor %}#}
+{#            </tbody>#}
+{#          </table>#}
+{#        </div>#}
+{#        <div class="tab-pane fade" id="summary_levels" role="tabpanel" aria-labelledby="contact-tab">#}
+{#          <table class="table table-hover">#}
+{#            <thead>#}
+{#              <tr>#}
+{#                {% for item in summaryLevelsTableInfo %}#}
+{#                    <th>{{ item.name }}</th>#}
+{#                  {% endfor %}#}
+{#              </tr>#}
+{#            </thead>#}
+{#            <tbody>#}
+{#            {% for element in summaryLevels %}#}
+{#              <tr>#}
+{#                <td>#}
+{#                  <h6 class="m-0">{{ element.id }}</h6>#}
+{#                </td>#}
+{#                <td>#}
+{#                  <h6 class="m-0">{{ element.levels }}</h6>#}
+{#                </td>#}
+{#                <td>#}
+{#                  <h6 class="m-0">{{ element.thread_id }}</h6>#}
+{#                </td>#}
+{#                <td>#}
+{#                  <h6 class="m-0">{{ element.last_changes }}</h6>#}
+{#                </td>#}
+{#                <td>#}
+{#                <h6 class="m-0">{{ element.leveled_summary }}</h6>#}
+{#                </td>#}
+{#            {% endfor %}#}
+{#              #}
+{#            </tbody>#}
+{#          </table>#}
+{#        </div>#}
+{#      </div>#}
+{#    </div>#}
+
+  </div>
+  <!-- [ Main Content ] end -->
+
+{% endblock content %}

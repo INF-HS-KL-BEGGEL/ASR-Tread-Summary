@@ -1,0 +1,39 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block breadcrumbs %}{% endblock breadcrumbs %}
+
+{% block content %}
+
+  <!-- [ Main Content ] start -->
+  <div class="row">
+  
+    <!--[ Recent Users ] start-->
+    <div class="col-xl">
+      <div class="card Recent-Users">
+          <div class="card-header">
+            <h5>Summary of thread: {{ threadName }}</h5>
+          </div>
+           <div class="table-responsive">
+              <table class="table table-hover">
+
+                <tbody>
+                
+                    <tr class="unread">
+                        
+                            <h5 class="card-block">{{ summarizedThreads }}</h5>
+                        
+                    </tr>
+
+                  
+                </tbody>
+                
+              </table>
+            </div>
+    </div>
+    </div>
+
+  </div>
+  <!-- [ Main Content ] end -->
+
+{% endblock content %}

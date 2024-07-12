@@ -1,0 +1,69 @@
+{% extends 'layouts/base.html' %}
+{% load humanize %}
+{% load static %}
+
+<!-- {% block breadcrumbs %}{% endblock breadcrumbs %} -->
+
+{% block content %}
+
+  <!-- [ Main Content ] start -->
+  <div class="row">
+  
+    <!--[ Recent Users ] start-->
+    <div class="col-xl">
+      <div class="card Recent-Users">
+          <div class="card-header">
+              <h4>Summary of thread: <a href="{{ thread_view_url }}">{{ thread_name }}</a></h4>
+              <div>
+                  <i class="far fa-hashtag" aria-hidden="true" title="Thread ID"></i>
+                  {{ thread_id }}
+                  &nbsp;&nbsp;
+                   <i class="far fa-clock" aria-hidden="true" title="Thread start date"></i>
+                  {{  thread_date|date:'M d, Y H:i' }}
+                  &nbsp;&nbsp;
+                  <i class="far fa-user" aria-hidden="true" title="Thread starter"></i>
+                  {{ thread_creator_username }}
+                  &nbsp;&nbsp;
+                  <i class="far fa-comments" aria-hidden="true" title="Thread post count"></i>
+                  {{ thread_reply_count }}
+                  &nbsp;&nbsp;
+                  <i class="far fa-align-justify" aria-hidden="true" title="Thread forum"></i>
+                  {{ thread_forum_title }}
+                  &nbsp;&nbsp;
+              </div>
+
+          </div>
+           <emp class="table-responsive">
+              <table class="table table-hover">
+
+                <tbody>
+                
+                    <tr class="unread">
+
+                        <h5 class="card-block" style="font: 17px / 1.4 sans-serif; font-family: 'Helvetica Neue', Helvetica, Roboto, Oxygen,Ubuntu,Cantarell,'Fira Sans','Droid Sans',sans-serif;">
+                            {{ summary | safe }}
+                        </h5>
+                        <hr>
+                        <div style="padding: 0 25px">
+                            Created: {{ thread_last_change|date:'Y-m-d H:i' }} &nbsp;&nbsp;
+                            Forum API: {{ thread_forum_api_requests|intcomma }} req in {{ thread_download_runtime|intcomma }} sec  &nbsp;&nbsp;
+                            LLM: {{ thread_ollama_llm_runs|intcomma }} runs in {{ thread_llm_runtime|intcomma }} sec  &nbsp;&nbsp;
+                            Tokens: {{ thread_llm_input_tokens|intcomma }} in / {{ thread_llm_output_tokens|intcomma }} out &nbsp;&nbsp;
+                            Model: {{ llm_model }} &nbsp;&nbsp;
+                        </div>
+
+                    </tr>
+
+
+                  
+                </tbody>
+                
+              </table>
+            </div>
+    </div>
+    </div>
+
+  </div>
+  <!-- [ Main Content ] end -->
+
+{% endblock content %}
